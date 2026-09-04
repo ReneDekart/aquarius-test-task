@@ -1,0 +1,14 @@
+{
+  "name": "ws-ap-server",
+  "version": "1.0.0",
+  "description": "Backend for WLC SPA",
+  "type": "module",
+  "author": "Artem Gorbachev",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^4.19.2"
+  }
+}
