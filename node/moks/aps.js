@@ -117,19 +117,6 @@ export default [
     "uptime": 0
   },
   {
-    "id": "ap-010",
-    "name": "фывфыв",
-    "model": "фывфыв",
-    "status": "online",
-    "ip": "192.168.111.111",
-    "channel": 1,
-    "band": "5G",
-    "location": "фвыфыв",
-    "group": "grp-000",
-    "clients": 0,
-    "uptime": 0
-  },
-  {
     "id": "ap-012",
     "name": "фывфыв",
     "model": "фывфывфыв",
@@ -138,6 +125,19 @@ export default [
     "channel": 4,
     "band": "5G",
     "location": "фывфыв",
+    "group": "grp-000",
+    "clients": 0,
+    "uptime": 0
+  },
+  {
+    "id": "ap-013",
+    "name": "asdasdas",
+    "model": "asdasdas",
+    "status": "online",
+    "ip": "192.168.1.1",
+    "channel": 5,
+    "band": "2.4G",
+    "location": "aaaaaaaaaaaaaaaa",
     "group": "grp-000",
     "clients": 0,
     "uptime": 0
