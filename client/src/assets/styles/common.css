@@ -1,0 +1,65 @@
+:root {
+    /* Основные цвета */
+    --black-color: #000; /* черный */
+    --white-color: #fff; /* белый */
+    --brand-color: #24566c; /* основной бренд-цвет */
+    --brand-secondary-color: #3FABA9; /* вторичный бренд-цвет */
+    --hover-color: #017A92; /* цвет при наведении */
+    --pressed-color: #006174; /* цвет при нажатии */
+    --bg-white-color: #f3f3f3; /* белый фон */
+    --bg-gray-color: #f4f8ff; /* серый фон */
+    --bg-error-color: #ff5252; /* фон ошибки */
+    
+    --btn-bg-color: #017a92; /* фон кнопки */
+    --btn-bg-color--hovered: #01687c; /* фон кнопки при наведении */
+
+    --main-bg-color: linear-gradient(126deg, #8eccce 0%, #4496a4 100%); /* основной градиентный фон */
+
+    /* Цвета текста */
+    --text-main-color: #000; /* основной цвет текста */
+    --text-secondary-color: #017A92; /* вторичный цвет текста */
+
+    --text-light-color: #e3e4e6; /* светлый цвет текста */
+    --text-gray-color: #b2b5b9; /* серый цвет текста */
+
+    /* Ссылки */
+    --active-link-color: #007BB0; /* цвет активной ссылки */
+    --hover-link-color: #029EC9; /* цвет ссылки при наведении */
+    
+    /* Скругления углов */
+    --btn-border-radius: 28px; /* скругление кнопок */
+
+    /* Тень кнопки при наведении */
+    --btn-box-shadow--hovered: 0 2px 20px #00648240;
+}
+
+h1 {
+    font-family: 'Arial', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 120%;
+}
+
+.default-btn {
+  border-radius: var(--btn-border-radius) !important;
+  background-color: var(--brand-secondary-color) !important;
+  border: none !important;
+  color: var(--white-color) !important;
+  font-weight: 400 !important;
+}
+
+.default-btn:hover {
+  background-color: #52b9b8 !important;
+}
+
+.default-cancel-btn {
+  border-radius: var(--btn-border-radius) !important;
+  background-color: var(--bg-error-color) !important;
+  border: none !important;
+  color: var(--white-color) !important;
+  font-weight: 400 !important;
+}
+
+.default-cancel-btn:hover {
+  background-color: #fa7272 !important;
+}
