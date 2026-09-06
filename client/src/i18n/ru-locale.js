@@ -56,6 +56,7 @@ export default {
   /** Одиночные слова */
   singleWords: {
     version: 'версия',
-    clients: 'Клиенты'
+    clients: 'Клиенты',
+    hardware: 'Устройства'
   }
 }

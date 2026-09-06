@@ -1,3 +1,11 @@
+<!--
+============================================================
+ LangSwitcher.vue
+============================================================
+ Компонент переключения текущей локали
+ Содержит el-dropdown-menu с выводом доступных языков
+============================================================
+-->
 <template>
 <el-dropdown
   class="lang-switcher"
@@ -28,6 +36,7 @@
 export default {
   data () {
     return {
+      /** список языков для выбора */
       languages: [
         { value: 'ru', label: 'Русский' },
         { value: 'en', label: 'English' }
@@ -35,11 +44,13 @@ export default {
     }
   },
   computed: {
+    /** текущий язык */
     currentLang () {
       return this.$i18n.locale.toLocaleUpperCase()
     }
   },
   methods: {
+    /** Меняем язык локали */
     changeLanguage (langCode) {
       this.$i18n.locale = langCode
     }

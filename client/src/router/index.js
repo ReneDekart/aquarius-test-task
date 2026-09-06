@@ -1,3 +1,6 @@
+/** Импортируем Vue, роутер,
+ * макеты, компоненты страниц приложения, локализацию i18n
+ * */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
@@ -6,46 +9,70 @@ import StatisticsView from '@/pages/statistics/StatisticsView.vue'
 import i18n from '@/i18n'
 import WelcomeLayout from '@/layouts/WelcomeLayout.vue'
 
+/** Регистрируем плагин vue-router */
 Vue.use(VueRouter)
+
+/**
+ * =====================
+ *  ОСНОВНЫЕ МАРШРУТЫ:
+ * =====================
+ * ''  - стартовая страница
+ * '/'  - коневой маршрут приложения
+ *  -- '/access-points'           - страница точек доступа
+ *  -- '/statistics'              - страница статистики
+ */
+
+/**
+ * =====================
+ *  МАКЕТЫ:
+ * =====================
+ * 'WelcomeLayout'            - используется только на стартовой
+ * 'DefaultLayout'            - основной макет всего приолжения
+ */
 
 const routes = [
   {
-    path: '',
-    name: 'welcome',
-    component: WelcomeLayout,
-    meta: { title: 'Aquarius WLC' }
+    path: '', // пустой путь — стартовая (приветственная) страница
+    name: 'welcome', // Уникальное имя для стартовой старницы
+    component: WelcomeLayout, // Макет для стартовой
+    meta: { title: 'Aquarius WLC' } // Заголовок тсартовой страницы
   },
   {
-    path: '/',
+    path: '/', // корневой путь приложения
     name: 'home',
-    meta: { title: 'routes.home.title' },
-    redirect: { name: 'access-points' },
-    component: DefaultLayout,
+    meta: { title: 'routes.home.title' }, // заголовок страницы тянем из локали
+    redirect: { name: 'access-points' }, // редиректим сразу на страницу с таблицей точек доступа
+    component: DefaultLayout, // Дефолтный макет страниц для дочерних маршрутов
     children: [
       {
         name: 'access-points',
-        path: '/access-points',
-        component: AccessPointsView,
-        meta: { title: 'routes.accessPointsPage.title' }
+        path: '/access-points', // URL страницы с таблицей точек доступа
+        component: AccessPointsView, // компонент страницы точек доступа
+        meta: { title: 'routes.accessPointsPage.title' } // Заголовок страницы тянем из локали
       },
       {
         name: 'statistics',
-        path: '/statistics',
-        component: StatisticsView,
-        meta: { title: 'routes.statistics.title' }
+        path: '/statistics', // URL страницы статистики
+        component: StatisticsView, // компонент страницы статистики
+        meta: { title: 'routes.statistics.title' } // Заголовок страницы тянем из локали
       }
     ]
   }
 ]
 
+/** Создаем экземпляр роутера с history mode */
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
 
+/** После каждого перехода
+ * тянем перевод заголовка из локали
+ * и обновляем заголовок страницы
+*/
 router.afterEach((to) => {
-  document.title = to.meta.title || 'Client SPA'
+  document.title = to.meta.title || 'Aquarius WLC'
 
   Vue.nextTick(() => {
     const titleKey = to.meta.title

@@ -1,9 +1,23 @@
+<!--
+  ============================================================
+   DefaultLayout.vue
+  ============================================================
+   Основной макет приложения.
+   Содержит:
+   - боковое меню навигации (SideMenu) слева;
+   - общую шапку страницы (DefaultHeader) сверху;
+   - компонент маршрутизации <router-view>.
+  ============================================================
+-->
 <template>
 <el-container class="default-layout__wrapper">
+  <!-- Боковое меню навигации -->
   <SideMenu />
   <el-container class="default-layout__content-wrapper" direction="vertical">
+    <!-- Общая шапка приложения -->
     <DefaultHeader />
     <el-main>
+      <!-- Выводим компонент активного дочернего маршрута -->
       <router-view />
     </el-main>
   </el-container>
@@ -18,16 +32,6 @@ export default {
   components: {
     SideMenu,
     DefaultHeader
-  },
-  data () {
-    const item = {
-      date: '2016-05-02',
-      name: 'Tom',
-      address: 'No. 189, Grove St, Los Angeles'
-    }
-    return {
-      tableData: Array(20).fill(item)
-    }
   }
 }
 </script>

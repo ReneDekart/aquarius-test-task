@@ -11,7 +11,8 @@
         class="statistics-chart__btn-start"
         :disabled="isPlaying"
         @click="play"
-      >{{ isStarted ? `${ this.$i18n.t('actions.resume') }` : `${ this.$i18n.t('actions.play') }` }}</el-button>
+      >{{ isStarted ? `${this.$i18n.t('actions.resume')}` : `${this.$i18n.t('actions.play')}` }}
+      </el-button>
       <el-button
         link
         type="danger"
@@ -26,7 +27,8 @@
         type="info"
         class="default-cancel-btn"
         @click="reset"
-      >{{ $i18n.t('actions.reset') }}</el-button>
+      >{{ $i18n.t('actions.reset') }}
+      </el-button>
     </div>
   </div>
 </template>
@@ -40,22 +42,33 @@ export default {
     statistics: {
       type: Array,
       default: () => []
+    },
+    aps: {
+      type: Array,
+      default: () => []
     }
   },
   data () {
     return {
+      /** Экземпляр Chart.js, создаётся в initChart() */
       chartInstance: null,
+      /** Флаг воспроизведения анимации в моменте */
       isPlaying: false,
+      /** Флаг анимации всего цикла */
       isStarted: false,
+      /** Длительность анимации роста одного столбца */
       durationPerBar: 3000,
-      delayPerBar: 3000,
-      elapsedTime: 0,
-      startTime: null,
+      /** Длитеольность имитации задержки обращения к серверу */
+      requestDelay: 500,
+      /** Количество загруженных столбцов */
+      loadedBars: 0,
+      /** Идентификатор текущего setTimeout */
       timerId: null,
+      /** Данные для отображения на графике */
       chartData: {
         labels: this.statistics.map(item => item.hour),
         datasets: [{
-          label: 'Клиенты',
+          label: '',
           data: this.statistics.map(() => 0),
           backgroundColor: 'rgba(36, 86, 108, 0.7)',
           borderColor: 'rgba(36, 86, 108, 1)',
@@ -63,14 +76,18 @@ export default {
           borderRadius: 6
         }]
       },
-      realData: this.statistics.map(item => item.clients)
+      /** Значения столбцов */
+      realData: []
     }
   },
   mounted () {
+    /** Создаём экземпляр графика */
     this.initChart()
   },
   beforeDestroy () {
-    /** очищаем */
+    /** При уничтожении компонента отменяем ожидающий таймер
+     * и унитожаем сам график
+    */
     this.clearTimer()
     if (this.chartInstance) {
       this.chartInstance.destroy()
@@ -78,94 +95,191 @@ export default {
   },
   methods: {
     initChart () {
+      /** Берём контекст канваса и создаём экземлар Chart.
+       *  Дефолтные данные подставляются из this.chartData
+       * */
       const ctx = this.$refs.chartCanvas.getContext('2d')
       this.chartInstance = new Chart(ctx, {
+        /** Тип диаграммы — вертикальные столбцы */
         type: 'bar',
         data: this.chartData,
         options: {
+          /** Подгоняем под родителя */
           responsive: true,
+          /** Пропорции отключаем, делаем высоту на масимум */
           maintainAspectRatio: false,
+          /** Отключаем встроенную анимацию */
           animation: false,
           scales: {
             y: {
+              /** Ось Y начинается с нуля */
               beginAtZero: true,
+              /** Верхняя граница оси — максимум + 1 */
               max: Math.max(...this.statistics.map(item => item.clients)) + 1,
+              /** Оставляем только целые числа */
               ticks: { precision: 0 }
             }
           },
           plugins: {
+            /** Скрываем легенду */
             legend: { display: false },
             tooltip: {
+              /** Конфигурация тултипа:
+               *  текущий часчас, количество точек и клиенты */
               callbacks: {
+                /** Заголовок подсказки — час, к которому относится столбец */
                 title: (items) => {
                   const item = items[0]
                   return this.statistics[item.dataIndex].hour
                 },
-                label: (item) => `Клиенты: ${this.statistics[item.dataIndex].clients}`,
-                afterLabel: (item) => this.statistics[item.dataIndex].clientIds.map(id => `- ${id}`)
+                label: (item) => `${this.$i18n.t('singleWords.clients')}: ${this.statistics[item.dataIndex].clients}`,
+                afterLabel: (item) => {
+                  /** мапим клиентов */
+                  const idsClient = this.statistics[item.dataIndex].clientIds.map(id => `- ${id}`)
+                  /** мапим айдишники точек и подставляем названия */
+                  const idsAp = this.statistics[item.dataIndex].apIds.map(id => {
+                    const aps = this.aps.filter(el => el.id === id)
+                    return aps.length > 0 ? `${aps[0].name}` : `- ${id}`
+                  })
+                  return `${idsClient.join('\n')}\n\n${this.$i18n.t('singleWords.hardware')}: ${this.statistics[item.dataIndex].apIds.length}\n${idsAp.join('\n')}`
+                }
               }
             }
           }
         }
       })
     },
+    /**
+     * Запуск/возобновление анимации.
+     */
     play () {
       if (!this.chartInstance || this.isPlaying) return
 
-      const totalExpectedTime = (this.realData.length - 1) * this.delayPerBar + this.durationPerBar
-      if (this.elapsedTime >= totalExpectedTime) {
-        this.elapsedTime = 0
-        this.isStarted = false
-      }
-
       this.isPlaying = true
       this.isStarted = true
-      this.startTime = Date.now() - this.elapsedTime
-
       this.clearTimer()
-      this.timerId = setInterval(() => {
-        this.elapsedTime = Date.now() - this.startTime
-        this.renderFrame()
-        if (this.elapsedTime >= totalExpectedTime) {
-          this.isPlaying = false
-          this.clearTimer()
-        }
-      }, 16)
 
-      this.renderFrame()
+      this.animateChart()
+        .then(() => {
+          this.isPlaying = false
+        })
+        .catch((error) => {
+          this.isPlaying = false
+          this.resetChart()
+          console.error('Ошибка анимации графика:', error)
+        })
     },
+    /**
+     * Возвращает цепочку промисов, в которой данные столбцов
+     * загружаются порциями по одному столбцу за раз
+     */
+    animateChart () {
+      /* Создаем выполненный промис для старта цепочки */
+      let chain = Promise.resolve()
+      for (let index = this.loadedBars; index < this.statistics.length; index++) {
+        chain = chain
+          .then(() => {
+            /* Если значение для этого столбца ещё не получено —
+               выполняем имимтацию обращения к серверу */
+            if (index >= this.realData.length) {
+              return this.getNextBarData()
+            }
+          })
+          .then(() => this.animateBar(index, this.realData[index]))
+      }
+      return chain
+    },
+    /**
+     * Имитирует обращение к серверу
+     * Возвращает undefined, если данных больше нет
+     */
+    getNextBarData () {
+      return new Promise((resolve) => {
+        this.timerId = setTimeout(() => {
+          const item = this.statistics[this.realData.length]
+          if (item) {
+            this.realData.push(item.clients)
+            console.log('Имитация обращения к серверу')
+            resolve(item.clients)
+          } else {
+            resolve(undefined)
+          }
+        }, this.requestDelay)
+      })
+    },
+    /**
+     * Анимация столбца
+     */
+    animateBar (index, value) {
+      return new Promise((resolve, reject) => {
+        if (typeof value !== 'number' || isNaN(value) || value < 0) {
+          reject(new Error(`Некорректное значение столбца ${index}`))
+          return
+        }
+
+        const startTime = Date.now()
+        const step = () => {
+          if (!this.isPlaying) return
+
+          const progress = Math.min((Date.now() - startTime) / this.durationPerBar, 1)
+          this.setBarValue(index, value * progress)
+
+          if (progress < 1) {
+            this.timerId = setTimeout(step, 16)
+          } else {
+            this.loadedBars = index + 1
+            resolve()
+          }
+        }
+
+        step()
+      })
+    },
+    /**
+     * Записывает текущее значение в data конкретного столбца, обновляет график бех анимации
+     */
+    setBarValue (index, value) {
+      this.chartData.datasets[0].data[index] = value
+      this.chartInstance.update('none')
+    },
+    /**
+     * Пауза: останавливает таймер и сбрасывает isPlaying.
+     */
     pause () {
       if (!this.chartInstance || !this.isPlaying) return
 
       this.isPlaying = false
       this.clearTimer()
-      this.elapsedTime = Date.now() - this.startTime
-      this.renderFrame()
     },
-    renderFrame () {
-      const values = this.realData.map((value, index) => {
-        const start = index * this.delayPerBar
-        const end = start + this.durationPerBar
-        if (this.elapsedTime <= start) return 0
-        if (this.elapsedTime >= end) return value
-        return value * ((this.elapsedTime - start) / this.durationPerBar)
-      })
-      this.chartData.datasets[0].data = values
-      this.chartInstance.update('none')
-    },
+    /**
+     * Полный сброс: останавливает воспроизведение, отменяет таймер
+     * и сбрасывает данные графика
+     */
     reset () {
       if (!this.chartInstance) return
 
       this.isPlaying = false
-      this.isStarted = false
       this.clearTimer()
-      this.elapsedTime = 0
-      this.renderFrame()
+      this.resetChart()
     },
-
+    /**
+     * Сбрасывает данные графика в нули и счётчик загруженных столбцов
+     */
+    resetChart () {
+      this.isStarted = false
+      this.loadedBars = 0
+      this.realData = []
+      this.chartData.datasets[0].data = this.statistics.map(() => 0)
+      if (this.chartInstance) {
+        this.chartInstance.update('none')
+      }
+    },
+    /**
+     * Отменяет таймер setTimeout
+     */
     clearTimer () {
       if (this.timerId) {
-        clearInterval(this.timerId)
+        clearTimeout(this.timerId)
         this.timerId = null
       }
     }

@@ -1,3 +1,8 @@
+/** 
+* Замена стилей библиотеки Element ui
+* на собсьтвенны для соответствия дизану
+*/
+
 .el-button--default {
     background-color: var(--btn-bg-color);
     padding: 12px 34px;

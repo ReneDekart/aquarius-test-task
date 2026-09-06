@@ -1,16 +1,16 @@
 import i18n from '@/i18n'
 import locales from './locales'
 
+/** возвращает настройки валидации полей формы,
+ * а так же обновляет перевод сообщений
+ *  в соответствии с текущей локалью
+ */
 export function getValidations () {
-  /** Расширяем локализацию */
+  /** Расширяем глобальный конфиг локализации */
   Object.keys(locales).forEach(locale => {
     i18n.mergeLocaleMessage(locale, locales[locale])
   })
 
-  /** Возвращаем объект
-   * с настрофками валидайии
-   * полей формы\
-   * */
   return {
     name: [
       {

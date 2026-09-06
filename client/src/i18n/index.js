@@ -14,7 +14,7 @@ const i18n = new VueI18n({
   // Язык по умолчанию
   locale: 'en',
   // Язык, используемый при отсутствии перевода
-  fallbackLocale: 'ru',
+  fallbackLocale: 'en',
   // Словари переводов для каждого языка + переводы Element UI
   messages: {
     en: enLocaleDictionary,
@@ -24,7 +24,7 @@ const i18n = new VueI18n({
   }
 })
 
-// Интеграция с Element UI: передача функции перевода в компоненты Element UI
+// Интеграция с Element UI
 ElementLocale.i18n((key, value) => i18n.t(key, value))
 
 export default i18n

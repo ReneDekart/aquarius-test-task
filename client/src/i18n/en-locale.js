@@ -28,8 +28,8 @@ export default {
   actions: {
     goToControl: 'Go to control',
     close: 'Close',
-    addAccessPoint: 'Add AP',
-    addApToTable: 'Add AP',
+    addAccessPoint: 'Add access point',
+    addApToTable: 'Add access point',
     reset: 'Reset',
     pause: 'Pause',
     play: 'Play',
@@ -56,6 +56,7 @@ export default {
   /** Одиночные слова */
   singleWords: {
     version: 'version',
-    clients: 'Clients'
+    clients: 'Clients',
+    hardware: 'Hardwares'
   }
 }

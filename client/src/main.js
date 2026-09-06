@@ -1,3 +1,7 @@
+/** Импортируем Vue,
+ * корневой компонент App и модули
+ * (роутер, стор, библиотеку Element-ui, i18n, http)
+ * */
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -6,6 +10,7 @@ import ElementUI from 'element-ui'
 import i18n from './i18n/index.js'
 import http from './api/http.js'
 
+/** Подключаем глобальные стили и стили библиотеки Element-ui */
 import '@/assets/styles/reset.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/styles/common.css'
@@ -20,9 +25,10 @@ Vue.use(ElementUI)
 /** Регистрируем обертку для работы с запросами */
 Vue.prototype.$http = http
 
+/** Создаем корневой экземпляр Vue приложения */
 new Vue({
-  i18n,
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+  i18n, // подключаем интернационализацию
+  router, // подключаем роутер
+  store, // подключаем Vuex
+  render: h => h(App) // рендерим корневой компонент App
+}).$mount('#app') // монтируем приложение в DOM-элемент с id="app"

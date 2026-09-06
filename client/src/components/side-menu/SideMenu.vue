@@ -1,3 +1,11 @@
+<!--
+============================================================
+ SideMenu.vue
+============================================================
+ Компонент окового меню приложения
+ Содержит ссылки для навигации по основным разделам приложения
+============================================================
+-->
 <template>
   <el-aside class="side-menu__wrapper">
     <el-menu
@@ -5,11 +13,14 @@
       :default-active="$route.path"
       class="side-menu__container"
     >
+      <!-- Шапка меню -->
       <div class="side-menu__logo-img__wrapper">
         <img src="@/assets/images/aquarius.svg" class="side-menu__logo-img"/>
       </div>
       <el-divider class="side-menu__top__divider"/>
+      <!-- Список разделов -->
       <div class="side-menu__items__wrapper">
+        <!-- Ссылка на раздел с таблицей точке доступа -->
         <el-menu-item
           index="/access-points"
           :route="{ name: 'access-points' }"
@@ -18,6 +29,7 @@
           <i class="el-icon-s-unfold"></i>
           <span>{{ $t('routes.accessPointsPage.sideMenuTitle') }}</span>
         </el-menu-item>
+        <!-- Ссылка на раздел с статистикой использования -->
         <el-menu-item
           index="/statistics"
           :route="{ name: 'statistics' }"
@@ -28,6 +40,7 @@
         </el-menu-item>
       </div>
       <el-divider class="side-menu__bottom-didvider"/>
+      <!-- Подвал меню -->
       <div class="side-menu__control-version">
         <span>WLC</span>
         <span>{{ $i18n.t('singleWords.version') }} 2.048.36P15</span>
