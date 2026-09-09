@@ -33,7 +33,8 @@ export default {
     reset: 'Reset',
     pause: 'Pause',
     play: 'Play',
-    resume: 'Resume'
+    resume: 'Resume',
+    toMain: 'Go to main'
   },
   /** Заголовки */
   titles: {
@@ -57,6 +58,17 @@ export default {
   singleWords: {
     version: 'version',
     clients: 'Clients',
-    hardware: 'Hardwares'
+    hardware: 'Hardwares',
+    notFound: 'Page not found'
+  },
+  /** Подтверждения действий */
+  confirmations: {
+    /** Конфирм удаления точки доступа */
+    deleteAP: {
+      message: 'Do you really want to delete the access point?',
+      applyBtn: 'Delete',
+      cancelBtn: 'Cancel',
+      confirmMessage: 'Access point removed'
+    }
   }
 }

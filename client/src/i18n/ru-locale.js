@@ -33,7 +33,8 @@ export default {
     reset: 'Сброс',
     pause: 'Пауза',
     play: 'Воспроизвести',
-    resume: 'Продолжить'
+    resume: 'Продолжить',
+    toMain: 'На главную'
   },
   /** Заголовки */
   titles: {
@@ -57,6 +58,17 @@ export default {
   singleWords: {
     version: 'версия',
     clients: 'Клиенты',
-    hardware: 'Устройства'
+    hardware: 'Устройства',
+    notFound: 'Страница не найдена'
+  },
+  /** Подтверждения действий */
+  confirmations: {
+    /** Конфирм удаления точки доступа */
+    deleteAP: {
+      message: 'Вы действительно хотите удалить точку доступа?',
+      applyBtn: 'Удалить',
+      cancelBtn: 'Отмена',
+      confirmMessage: 'Точка доступа удалена'
+    }
   }
 }

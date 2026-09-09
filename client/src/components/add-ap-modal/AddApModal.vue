@@ -113,6 +113,7 @@ export default {
     }
   },
   computed: {
+    /** Флаг состояния отображения формы */
     dialogFormVisible: {
       get () {
         if (this.value) {
@@ -147,6 +148,7 @@ export default {
     }
   },
   methods: {
+    /** Обработка нажатия на кнопку "Добавить" */
     onApplyClick () {
       // Проверяем валидность данных формы
       this.$refs.createForm.validate((valid) => {
@@ -160,12 +162,14 @@ export default {
         }
       })
     },
+    /**  обработчик закрытия формы */
     onCloseClick () {
       /** Вызываем метод сброса состояния формы */
       this.resetForm()
       /** Скрываем форму */
       this.dialogFormVisible = false
     },
+    /** Возврат формы в исходное состояние */
     resetForm () {
       /** Сбрасываем данные формы */
       this.apData = { ...defaultAPData }

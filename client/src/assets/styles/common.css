@@ -11,7 +11,12 @@
     --bg-error-color: #ff5252; /* фон ошибки */
     
     --btn-bg-color: #017a92; /* фон кнопки */
-    --btn-bg-color--hovered: #01687c; /* фон кнопки при наведении */
+    --btn-bg-color--hovered: #66d5d3; /* фон кнопки при наведении */
+    --err-btn-bg-color: var(--bg-error-color); /** фон кнопок удаления */
+    --err-btn-bg-color--hovered: #ff6e6e; /** фон кнопок удаления */
+
+    --active-link-bg-color: #e8f5f5;
+    --active-link-color: #ecf5ff;
 
     --main-bg-color: linear-gradient(126deg, #8eccce 0%, #4496a4 100%); /* основной градиентный фон */
 

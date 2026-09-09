@@ -1,3 +1,13 @@
+<!--
+============================================================
+ AccessPointsTable.vue
+============================================================
+ Компонент с таблицей.
+ Массив с точками доступа приходит от родительского компонента
+ События компонента:
+ 'ap-deleted' - эмитится после пордтверждения удаления точки доступа
+============================================================
+-->
 <template>
     <el-table
       v-loading="isLoading"
@@ -60,16 +70,64 @@ export default {
     }
   },
   methods: {
+    /**  обработчик нажатия на кнопку удаления */
     handleDelete (index, row) {
-      // Возвращаем родителю айдишник точки доступа
-      this.$emit('ap-deleted', row.id || null)
+      this.$confirm(this.$i18n.t('confirmations.deleteAP.message'), '', {
+        confirmButtonText: this.$i18n.t('confirmations.deleteAP.applyBtn'),
+        cancelButtonText: this.$i18n.t('confirmations.deleteAP.cancelBtn'),
+        type: 'warning',
+        customClass: 'access-points-table__confirm-delete-box'
+      }).then(() => {
+        // Возвращаем родителю айдишник точки доступа
+        this.$emit('ap-deleted', row.id || null)
+      }).catch(() => {
+        console.log('canceled')
+      })
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
 .el-button .access-points-table__delete-button {
   background-color: var(--bg-error-color);
+}
+
+.access-points-table__confirm-delete-box {
+  width: 450px;
+}
+
+.access-points-table__confirm-delete-box .el-message-box__content .el-message-box__status.el-icon-warning {
+  color: var(--bg-error-color);
+}
+
+.access-points-table__confirm-delete-box .el-message-box__content .el-message-box__container {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.access-points-table__confirm-delete-box .el-message-box__btns .el-button--default {
+  padding: 12px 34px;
+  color: var(--white-color);
+  border: none !important;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  border-radius: var(--btn-border-radius) !important;
+}
+
+.access-points-table__confirm-delete-box .el-message-box__btns .el-button--default:nth-child(1) {
+    background-color: var(--bg-error-color) !important;
+}
+.access-points-table__confirm-delete-box .el-message-box__btns .el-button--default:nth-child(1):hover {
+  background-color: var(--err-btn-bg-color--hovered) !important;
+}
+
+.access-points-table__confirm-delete-box .el-message-box__btns .el-button--default:nth-child(2) {
+  background-color: var(--brand-secondary-color) !important;
+}
+
+.access-points-table__confirm-delete-box .el-message-box__btns .el-button--default:nth-child(2):hover {
+  background-color: var(--btn-bg-color--hovered) !important;
 }
 </style>

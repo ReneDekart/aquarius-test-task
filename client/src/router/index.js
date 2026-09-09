@@ -8,6 +8,7 @@ import AccessPointsView from '@/pages/access-points/AccessPointsView.vue'
 import StatisticsView from '@/pages/statistics/StatisticsView.vue'
 import i18n from '@/i18n'
 import WelcomeLayout from '@/layouts/WelcomeLayout.vue'
+import NotFoundLayout from '@/layouts/NotFoundLayout.vue'
 
 /** Регистрируем плагин vue-router */
 Vue.use(VueRouter)
@@ -57,6 +58,11 @@ const routes = [
         meta: { title: 'routes.statistics.title' } // Заголовок страницы тянем из локали
       }
     ]
+  },
+  /** Маршрут для 404 */
+  {
+    path: '*',
+    component: NotFoundLayout
   }
 ]
 

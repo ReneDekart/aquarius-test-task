@@ -14,9 +14,9 @@
       class="side-menu__container"
     >
       <!-- Шапка меню -->
-      <div class="side-menu__logo-img__wrapper">
-        <img src="@/assets/images/aquarius.svg" class="side-menu__logo-img"/>
-      </div>
+      <a class="side-menu__logo-img__wrapper" href="https://aq.ru" target="blank">
+          <img src="@/assets/images/aquarius.svg" class="side-menu__logo-img"/>
+      </a>
       <el-divider class="side-menu__top__divider"/>
       <!-- Список разделов -->
       <div class="side-menu__items__wrapper">
@@ -102,7 +102,8 @@
 }
 
 .el-menu-item.is-active {
-  color: #007BB0;
+  background-color: var(--active-lonk-color);
+  color: var(--brand-secondary-color);
 }
 
 .side-menu__bottom-didvider {

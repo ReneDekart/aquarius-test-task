@@ -1,3 +1,10 @@
+<!--
+============================================================
+ AccessPointsView.vue
+============================================================
+ Компонент страницы списка точек доступа
+============================================================
+-->
 <template>
   <el-col class="access-points-view">
     <el-row type="flex" justify="space-between">
@@ -49,6 +56,7 @@ export default {
     }
   },
   methods: {
+    /** Обработка события добавления точки доступа */
     onAddAPClick () {
       this.isModalOpen = true
     },
@@ -66,12 +74,20 @@ export default {
         await this.getAccsessPoints()
       }
     },
+    /** Обработка события удаления точки доступа */
     async onAPDeleted (apId) {
       /** Включаем отображение спинера */
       this.isLoading = true
       try {
         /** Удаляем точку по её айдишнику */
         await apsApi.deleteAccessPoint(apId)
+        /** Показываем сообщение об успешном удалении */
+        this.$message({
+          type: 'success',
+          message: this.$i18n.t('confirmations.deleteAP.confirmMessage'),
+          customClass: 'access-points-view__confirm-delete-message',
+          duration: 3000
+        })
       } catch (err) {
         console.log(err)
       } finally {
@@ -80,6 +96,7 @@ export default {
         await this.getAccsessPoints()
       }
     },
+    /** Метод для получения список точек доступа */
     async getAccsessPoints () {
       /** Включаем отображение спинера */
       this.isLoading = true
@@ -108,11 +125,24 @@ export default {
   flex-direction: column;
   gap: 12px;
 }
+
 .access-points-view__add-btn__wrapper {
   height: 100%;
   display: flex;
   justify-content: end;
   align-items: end;
   padding-bottom: 14px;
+}
+
+.access-points-view__confirm-delete-message .el-message__icon.el-icon-success {
+  background-color: var(--active-link-bg-color) !important;
+}
+
+.access-points-view__confirm-delete-message .el-message__icon.el-icon-success {
+  color: var(--brand-secondary-color) !important;
+}
+
+.access-points-view__confirm-delete-message .el-message__content {
+  color: var(--brand-secondary-color) !important;
 }
 </style>
