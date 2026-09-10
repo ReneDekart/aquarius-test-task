@@ -72,17 +72,7 @@ export default {
       /** Количество загруженных столбцов */
       loadedBars: 0,
       /** Данные для отображения на графике */
-      chartData: {
-        labels: this.statistics.map(item => item.hour),
-        datasets: [{
-          label: '',
-          data: this.statistics.map(() => 0),
-          backgroundColor: 'rgba(36, 86, 108, 0.7)',
-          borderColor: 'rgba(36, 86, 108, 1)',
-          borderWidth: 1,
-          borderRadius: 6
-        }]
-      },
+      chartData: [],
       /** Значения столбцов */
       realData: []
     }
@@ -109,7 +99,17 @@ export default {
       this.chartInstance = new Chart(ctx, {
         /** Тип диаграммы — вертикальные столбцы */
         type: 'bar',
-        data: this.chartData,
+        data: {
+          labels: this.statistics.map(item => item.hour),
+          datasets: [{
+            label: '',
+            data: this.chartData,
+            backgroundColor: 'rgba(36, 86, 108, 0.7)',
+            borderColor: 'rgba(36, 86, 108, 1)',
+            borderWidth: 1,
+            borderRadius: 6
+          }]
+        },
         options: {
           /** Подгоняем под родителя */
           responsive: true,
@@ -240,7 +240,7 @@ export default {
      * Записывает текущее значение в data конкретного столбца, обновляет график бех анимации
      */
     setBarValue (index, value) {
-      this.chartData.datasets[0].data[index] = value
+      this.chartData[index] = value
       this.chartInstance.update('none')
     },
     /**
@@ -268,8 +268,10 @@ export default {
       this.isStarted = false
       this.loadedBars = 0
       this.realData = []
-      this.chartData.datasets[0].data = []
+      this.chartData = []
       if (this.chartInstance) {
+        this.chartInstance.destroy()
+        this.initChart()
         this.chartInstance.update('none')
       }
     }
