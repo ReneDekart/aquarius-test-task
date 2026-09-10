@@ -201,9 +201,9 @@ export default {
           if (item) {
             this.realData.push(item.clients)
             console.log('Имитация обращения к серверу')
-            resolve(item.clients)
+            resolve(true)
           } else {
-            resolve(undefined)
+            resolve(false)
           }
         }, this.requestDelay)
       })
@@ -272,7 +272,6 @@ export default {
       if (this.chartInstance) {
         this.chartInstance.destroy()
         this.initChart()
-        this.chartInstance.update('none')
       }
     }
   }
