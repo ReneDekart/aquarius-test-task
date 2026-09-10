@@ -24,7 +24,7 @@
           :min-width="tableColumn.minWidth"
         />
         <el-table-column
-          :label="$i18n.$t(`accessPointTableColumns.actions`)"
+          :label="$i18n.t(`accessPointTableColumns.actions`)"
           align="center"
           min-width="100"
         >
