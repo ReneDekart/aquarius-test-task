@@ -52,14 +52,15 @@ export default {
     ipAddress: 'IP-address',
     band: 'Band',
     channel: 'Channel',
-    location: 'Локация'
+    location: 'Location'
   },
   /** Одиночные слова */
   singleWords: {
     version: 'version',
     clients: 'Clients',
     hardware: 'Hardwares',
-    notFound: 'Page not found'
+    notFound: 'Page not found',
+    noData: 'No data'
   },
   /** Подтверждения действий */
   confirmations: {

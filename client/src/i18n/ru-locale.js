@@ -59,7 +59,8 @@ export default {
     version: 'версия',
     clients: 'Клиенты',
     hardware: 'Устройства',
-    notFound: 'Страница не найдена'
+    notFound: 'Страница не найдена',
+    noData: 'Нет данных'
   },
   /** Подтверждения действий */
   confirmations: {

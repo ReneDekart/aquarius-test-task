@@ -12,7 +12,7 @@
         {{ $i18n.t('titles.statisticsPageH1') }}
     </h1>
     <StatisticsChart v-if="statistics.length" :statistics="statistics" />
-    <el-empty v-else :image-size="200" description="No data"></el-empty>
+    <el-empty v-else :image-size="200" :description="$i18n.t('singleWords.noData')"></el-empty>
   </el-col>
 </template>
 
