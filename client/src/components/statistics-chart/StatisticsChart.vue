@@ -71,8 +71,6 @@ export default {
       requestDelay: 500,
       /** Количество загруженных столбцов */
       loadedBars: 0,
-      /** Идентификатор текущего setTimeout */
-      timerId: null,
       /** Данные для отображения на графике */
       chartData: {
         labels: this.statistics.map(item => item.hour),
@@ -97,7 +95,6 @@ export default {
     /** При уничтожении компонента отменяем ожидающий таймер
      * и унитожаем сам график
     */
-    this.clearTimer()
     if (this.chartInstance) {
       this.chartInstance.destroy()
     }
@@ -167,7 +164,6 @@ export default {
 
       this.isPlaying = true
       this.isStarted = true
-      this.clearTimer()
 
       this.animateChart()
         .then(() => {
@@ -183,21 +179,16 @@ export default {
      * Возвращает цепочку промисов, в которой данные столбцов
      * загружаются порциями по одному столбцу за раз
      */
-    animateChart () {
-      /* Создаем выполненный промис для старта цепочки */
-      let chain = Promise.resolve()
+    async animateChart () {
       for (let index = this.loadedBars; index < this.statistics.length; index++) {
-        chain = chain
-          .then(() => {
-            /* Если значение для этого столбца ещё не получено —
-               выполняем имимтацию обращения к серверу */
-            if (index >= this.realData.length) {
-              return this.getNextBarData()
-            }
-          })
-          .then(() => this.animateBar(index, this.realData[index]))
+        /* Если значение для этого столбца ещё не получено —
+          выполняем имимтацию обращения к серверу
+        */
+        if (index >= this.realData.length) {
+          await this.getNextBarData()
+        }
+        await this.animateBar(index, this.realData[index])
       }
-      return chain
     },
     /**
      * Имитирует обращение к серверу
@@ -205,7 +196,7 @@ export default {
      */
     getNextBarData () {
       return new Promise((resolve) => {
-        this.timerId = setTimeout(() => {
+        setTimeout(() => {
           const item = this.statistics[this.realData.length]
           if (item) {
             this.realData.push(item.clients)
@@ -235,7 +226,7 @@ export default {
           this.setBarValue(index, value * progress)
 
           if (progress < 1) {
-            this.timerId = setTimeout(step, 16)
+            setTimeout(step, 16)
           } else {
             this.loadedBars = index + 1
             resolve()
@@ -259,7 +250,6 @@ export default {
       if (!this.chartInstance || !this.isPlaying) return
 
       this.isPlaying = false
-      this.clearTimer()
     },
     /**
      * Полный сброс: останавливает воспроизведение, отменяет таймер
@@ -269,7 +259,6 @@ export default {
       if (!this.chartInstance) return
 
       this.isPlaying = false
-      this.clearTimer()
       this.resetChart()
     },
     /**
@@ -279,18 +268,9 @@ export default {
       this.isStarted = false
       this.loadedBars = 0
       this.realData = []
-      this.chartData.datasets[0].data = this.statistics.map(() => 0)
+      this.chartData.datasets[0].data = []
       if (this.chartInstance) {
         this.chartInstance.update('none')
-      }
-    },
-    /**
-     * Отменяет таймер setTimeout
-     */
-    clearTimer () {
-      if (this.timerId) {
-        clearTimeout(this.timerId)
-        this.timerId = null
       }
     }
   }

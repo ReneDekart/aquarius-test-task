@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import { RouterLink } from 'vue-router'
+
+</script>
+
 <!--
 ============================================================
  SideMenu.vue
@@ -14,9 +19,11 @@
       class="side-menu__container"
     >
       <!-- Шапка меню -->
-      <a class="side-menu__logo-img__wrapper" href="https://aq.ru" target="blank">
+       <router-link :to="{ name: 'home'}">
+        <div class="side-menu__logo-img__wrapper">
           <img src="@/assets/images/aquarius.svg" class="side-menu__logo-img"/>
-      </a>
+        </div>
+       </router-link>
       <el-divider class="side-menu__top__divider"/>
       <!-- Список разделов -->
       <div class="side-menu__items__wrapper">
